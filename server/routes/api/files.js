@@ -2,8 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  console.log('hello');
-  res.send('Hello, World!');
+    res.send('This is the route that would return a list of files.');
 });
 
 module.exports = router;

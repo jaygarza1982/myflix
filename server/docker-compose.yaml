@@ -7,3 +7,11 @@ services:
       - ./files:/usr/local/apache2/htdocs/
     ports:
       - 8009:80
+  api-server:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    ports:
+      - 3000:3000
+      - 9229:9229
