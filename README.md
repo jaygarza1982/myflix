@@ -1,4 +1,4 @@
-# myflix
+# MyFlix
 #### A Dockerized solution for self-hosted content viewing
 
 The goal of this project is to emulate Netflix or YouTube in a self hosted and managed way.
