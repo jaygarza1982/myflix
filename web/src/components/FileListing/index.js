@@ -1,0 +1,44 @@
+import { Button, Grid } from '@material-ui/core';
+import { Description, FolderOpen } from '@material-ui/icons';
+import React, { Component } from 'react';
+
+class index extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            folderPath: '/',
+            files: [],
+        };
+    }
+
+    updateFiles() {
+        fetch('/api/files').then(resp => {
+            resp.json().then(json => {
+                this.setState({ files: json });
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.updateFiles();
+    }
+
+    render() {
+        return (
+            <Grid container justify={'center'}>
+                {
+                    this.state.files.map(file => (
+                        <Grid item xs={2}>
+                            <Button startIcon={file.directory ? <FolderOpen /> : <Description />}>
+                                {file.filename}
+                            </Button>
+                        </Grid>
+                    ))
+                }
+            </Grid>
+        );
+    }
+}
+
+export default index;
