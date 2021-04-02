@@ -2,12 +2,14 @@ version: '3'
 
 services: 
   apache:
+    container_name: "apache-server"
     image: httpd:2.4
     volumes:
       - ./files:/usr/local/apache2/htdocs/
     ports:
       - 8009:80
   api-server:
+    container_name: "api-server"
     build:
       context: .
     volumes:

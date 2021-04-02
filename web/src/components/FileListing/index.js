@@ -1,6 +1,7 @@
 import { Button, Grid } from '@material-ui/core';
 import { Description, FolderOpen } from '@material-ui/icons';
 import React, { Component } from 'react';
+import MediaCard from './MediaCard';
 
 class index extends Component {
 
@@ -30,9 +31,15 @@ class index extends Component {
                 {
                     this.state.files.map(file => (
                         <Grid item xs={2}>
-                            <Button startIcon={file.directory ? <FolderOpen /> : <Description />}>
+                            <MediaCard
+                                filename={file.filename}
+                                directory={file.directory}
+                                size={file.size}
+                                created={file.created}
+                            />
+                            {/* <Button startIcon={file.directory ? <FolderOpen /> : <Description />}>
                                 {file.filename}
-                            </Button>
+                            </Button> */}
                         </Grid>
                     ))
                 }
