@@ -30,7 +30,7 @@ class index extends Component {
             <Grid container justify={'center'}>
                 {
                     this.state.files.map(file => (
-                        <Grid item xs={2}>
+                        <Grid item style={{ margin: '10px'}} xs={12} md={3} lg={3} xl={3}>
                             <MediaCard
                                 filename={file.filename}
                                 directory={file.directory}
