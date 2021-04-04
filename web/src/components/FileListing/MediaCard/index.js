@@ -33,7 +33,7 @@ export default function MediaCard(props) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={`/api/video-utils/export-from-video?video=${props.filename}`}
+                    image={`/api/video-utils/export-from-video?video=${props.folderPath == '' ? '' : `${props.folderPath}/`}${props.filename}`}
                 />
                 <CardContent>
                     <Typography gutterBottom variant='h5' component='h2'>
@@ -56,7 +56,7 @@ export default function MediaCard(props) {
                 </Button>
                 {
                     props.directory ? (
-                        <Button size='small' color='primary'>
+                        <Button size='small' color='primary' onClick={() => {props.updateFolderFunction()}}>
                             Browse
                         </Button>
                     ) : ''

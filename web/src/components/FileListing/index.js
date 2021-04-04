@@ -2,21 +2,30 @@ import { Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import MediaCard from './MediaCard';
 
-class index extends Component {
+class FileListing extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            folderPath: '/',
+            folderPath: '',
             files: [],
         };
     }
 
     updateFiles() {
-        fetch('/api/files').then(resp => {
-            resp.json().then(json => {
-                this.setState({ files: json });
+        this.setState({ files: [] }, () => {
+            fetch(`/api/files${this.state.folderPath === '' ? '' : `?dir=${this.state.folderPath}`}`).then(resp => {
+                resp.json().then(json => {
+                    this.setState({ files: json });
+                });
             });
+        });
+    }
+
+    updateFolderPath = newPath => {
+        console.log('Update folder ', newPath);
+        this.setState({ folderPath: newPath }, () => {
+            this.updateFiles();
         });
     }
 
@@ -28,13 +37,15 @@ class index extends Component {
         return (
             <Grid container justify={'center'}>
                 {
-                    this.state.files.map(file => (
-                        <Grid item style={{ margin: '10px'}} xs={12} md={3} lg={3} xl={3}>
+                    this.state.files.map((file, index) => (
+                        <Grid key={`file-${index}`} item style={{ margin: '10px'}} xs={12} md={3} lg={3} xl={3}>
                             <MediaCard
                                 filename={file.filename}
                                 directory={file.directory}
                                 size={file.size}
                                 created={file.created}
+                                updateFolderFunction={this.updateFolderPath.bind(this, file.filename)}
+                                folderPath={this.state.folderPath}
                             />
                         </Grid>
                     ))
@@ -44,4 +55,4 @@ class index extends Component {
     }
 }
 
-export default index;
+export default FileListing;

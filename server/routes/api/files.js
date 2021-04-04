@@ -3,13 +3,17 @@ var router = express.Router();
 const fs = require('fs');
 
 router.get('/', (req, res) => {
+    const queryDir = req.query.dir || '';
+
     try {
-        let dirList = fs.readdirSync(process.env.MEDIA_FILES_PATH);
+        const listingDir = `${process.env.MEDIA_FILES_PATH}${queryDir  == '' ? '' : `/${queryDir}`}`;
+
+        let dirList = fs.readdirSync(listingDir);
         let filesAndDirs = [];
 
         //Build directory listing with metadata about the file
         dirList.forEach(listing => {
-            let listingStats = fs.lstatSync(`/app/${process.env.MEDIA_FILES_PATH}/${listing}`);
+            let listingStats = fs.lstatSync(`/app/${listingDir}/${listing}`);
 
             filesAndDirs.push({
                 filename: listing,
