@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Description, FolderOpen } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -33,7 +34,7 @@ export default function MediaCard(props) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image={`/api/video-utils/export-from-video?video=${props.folderPath == '' ? '' : `${props.folderPath}/`}${props.filename}`}
+                    image={`/api/video-utils/export-from-video?video=${props.folderPath === '' ? '' : `${props.folderPath}/`}${props.filename}`}
                 />
                 <CardContent>
                     <Typography gutterBottom variant='h5' component='h2'>
@@ -56,9 +57,9 @@ export default function MediaCard(props) {
                 </Button>
                 {
                     props.directory ? (
-                        <Button size='small' color='primary' onClick={() => {props.updateFolderFunction()}}>
-                            Browse
-                        </Button>
+               
+                            <Link to={`${props.currentPath}/${props.filename}`} >Browse</Link>
+
                     ) : ''
                 }
             </CardActions>
