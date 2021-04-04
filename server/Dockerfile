@@ -2,6 +2,8 @@ FROM node:14-alpine
 
 WORKDIR /app
 
+RUN mkdir images
+
 #Copy and install node dependencies
 COPY package-lock.json .
 COPY package.json .

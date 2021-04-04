@@ -33,8 +33,7 @@ export default function MediaCard(props) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image='/static/images/cards/contemplative-reptile.jpg'
-                    title={'Contemplative Reptile'}
+                    image={`/api/video-utils/export-from-video?video=${props.filename}`}
                 />
                 <CardContent>
                     <Typography gutterBottom variant='h5' component='h2'>

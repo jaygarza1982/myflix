@@ -1,5 +1,4 @@
-import { Button, Grid } from '@material-ui/core';
-import { Description, FolderOpen } from '@material-ui/icons';
+import { Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 import MediaCard from './MediaCard';
 
