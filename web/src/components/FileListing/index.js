@@ -37,9 +37,6 @@ class index extends Component {
                                 size={file.size}
                                 created={file.created}
                             />
-                            {/* <Button startIcon={file.directory ? <FolderOpen /> : <Description />}>
-                                {file.filename}
-                            </Button> */}
                         </Grid>
                     ))
                 }
