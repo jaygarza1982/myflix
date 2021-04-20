@@ -1,19 +1,28 @@
 import { Grid } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import MediaCard from './MediaCard';
+import { useParams, useRouteMatch } from 'react-router-dom';
 
 export default function FileListing(props) {
-    const [files, setFiles] = React.useState([]);
+    const [files, setFiles] = React.useState({});
     const [folderPath, setFolderPath] = React.useState('');
 
-    useEffect(() => {
-        setFolderPath(props.match.params.folder ? props.match.params.folder : '');
-    }, [props.match.params.folder]);
+    const { url } = useRouteMatch();
+    const { folder } = useParams();
 
+    //Set our folder path
+    useEffect(() => {
+        setFolderPath(folder ? folder : '');
+    }, [folder]);
+
+    //When folder path is set, reload our media cards with what is in the folder
     useEffect(() => {
         fetch(`/api/files${folderPath === '' ? '' : `?dir=${folderPath}`}`).then(resp => {
             resp.json().then(json => {
-                setFiles(json);
+                let filesCopy = JSON.parse(JSON.stringify(files));
+                filesCopy[folderPath] = json;
+
+                setFiles(filesCopy);
             });
         });
     }, [folderPath]);
@@ -21,18 +30,22 @@ export default function FileListing(props) {
     return (
         <Grid container justify={'center'}>
             {
-                files.map((file, index) => (
-                    <Grid key={`file-${index}`} item style={{ margin: '10px' }} xs={12} md={3} lg={3} xl={3}>
-                        <MediaCard
-                            filename={file.filename}
-                            directory={file.directory}
-                            size={file.size}
-                            created={file.created}
-                            folderPath={folderPath}
-                            currentPath={folderPath}
-                        />
-                    </Grid>
-                ))
+                files[folderPath] ? files[folderPath].map((file, index) => {
+                    return (
+                        <Grid key={`file-${index}`} item style={{ margin: '10px' }} xs={12} md={3} lg={3} xl={3}>
+                            <MediaCard
+                                filename={file.filename}
+                                directory={file.directory}
+                                size={file.size}
+                                created={file.created}
+                                folderPath={folderPath}
+                                //Nesting with urls
+                                fullPath={`${url.length === 1 ? '' : url}/${file.filename}`}
+                            />
+                        </Grid>
+                    )
+                }
+                 ) : ''
             }
         </Grid>
     );

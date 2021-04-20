@@ -56,10 +56,9 @@ export default function MediaCard(props) {
                     Play
                 </Button>
                 {
+                    //Show browse button if directory
                     props.directory ? (
-               
-                            <Link to={`${props.currentPath}/${props.filename}`} >Browse</Link>
-
+                        <Link to={props.fullPath} >Browse</Link>
                     ) : ''
                 }
             </CardActions>

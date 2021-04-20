@@ -20,10 +20,10 @@ function CustomNavbar(props) {
   const [locations, setLocations] = React.useState([]);
 
   useEffect(() => {
-    console.log(props.location);
-
     //Get a list of non-empty links in the url
     setLocations(props.location.pathname.split('/').filter(s => s.length > 0))
+    let local = props.location.pathname.split('/').filter(s => s.length > 0);
+    console.log(local.slice(0, local.length).join('/'));
   }, [props.location]);
   
 
@@ -35,21 +35,15 @@ function CustomNavbar(props) {
           icon={<HomeIcon fontSize='small' />}
         />
       </Link>
-      {
-        locations.map((location, index) => (
-            <Link
-              key={`link-${index}`}
-              className={classes.link}
-              to={locations.slice(0, index + 1).join('/')}
-            >
-              <Chip
-                label={location}
-                icon={<FolderOpen fontSize='small' />}
-              />
-            </Link>
-          )
-        )
-      }
+      {/* <Link
+        className={classes.link}
+        to={locations.slice(0, locations.length - 1).join('/')}
+      >
+        <Chip
+          label={locations[locations.length - 2]}
+          icon={<FolderOpen fontSize='small' />}
+        />
+      </Link> */}
     </Breadcrumbs>
   );
 }
