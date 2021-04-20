@@ -5,7 +5,6 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/api/files');
-var proxyRouter = require('./routes/api/proxy');
 var videoUtilsRouter = require('./routes/api/video-utils');
 
 var app = express();
@@ -17,7 +16,6 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/api/files', filesRouter);
-app.use('/api/proxy', proxyRouter);
 app.use('/api/video-utils', videoUtilsRouter);
 
 module.exports = app;
