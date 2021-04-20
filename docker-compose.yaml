@@ -1,0 +1,29 @@
+version: '3'
+
+services: 
+    apache:
+        container_name: "apache-server"
+        image: httpd:2.4
+        volumes:
+            - ./server/files:/usr/local/apache2/htdocs/
+        ports:
+            - 8009:80
+    api-server:
+        container_name: "myflix-api-server"
+        build:
+            context: ./server
+        volumes:
+            - ./server:/app
+            - /app/node_modules
+            - ./server/images:/app/images
+        ports:
+            - 3001:3000
+            - 9229:9229
+        environment: 
+            - MEDIA_FILES_PATH=files
+    web-server:
+        container_name: "myflix-web-server"
+        build:
+            context: ./web
+        ports:
+            - 8010:80
