@@ -12,11 +12,28 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 345,
+        height: 345,
+        position: 'relative',
+        backgroundColor: '#373737',
+        color: '#fff',
     },
     media: {
         height: 140,
     },
+    link: {
+        textDecoration: 'none',
+        color: '#252525',
+    },
+    cardContent: {
+        color: '#fff',
+    },
+    cardInfo: {
+        color: '#868686',
+    },
+    cardActions: {
+        position: 'absolute',
+        bottom: 0,
+    }
 });
 
 const getTime = date => {
@@ -29,38 +46,42 @@ const getTime = date => {
 export default function MediaCard(props) {
     const classes = useStyles();
 
+    const serverFilePath = `${props.folderPath === '' ? '' : `${props.folderPath}/`}${props.filename}`;
+    const linkTo = `${props.directory ? props.fullPath : `/video/${serverFilePath}`}`;
+
     return (
         <Card className={classes.root}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={`/api/video-utils/export-from-video?video=${props.folderPath === '' ? '' : `${props.folderPath}/`}${props.filename}`}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                        {props.filename}
-                    </Typography>
-                    <Typography variant='body2' color='textSecondary' component='p'>
-                        {(props.size / 1000000).toFixed(2)} MB
-                    </Typography>
-                    <Typography variant='body2' color='textSecondary' component='p'>
-                        { getTime(props.created).YMD } { getTime(props.created).time }
-                    </Typography>
-                    <Typography variant='body2' color='textSecondary' component='p'>
-                        { props.directory ? <FolderOpen /> : <Description /> }
-                    </Typography>
-                </CardContent>
+                <Link className={classes.link} to={linkTo}>
+                    <CardMedia
+                        className={classes.media}
+                        image={`/api/video-utils/export-from-video?video=${serverFilePath}`}
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant='h5' component='h2'>
+                            {props.filename}
+                        </Typography>
+                        <Typography className={classes.cardInfo} variant='body2' component='p'>
+                            {(props.size / 1000000).toFixed(2)} MB
+                        </Typography>
+                        <Typography className={classes.cardInfo} variant='body2' component='p'>
+                            { getTime(props.created).YMD } { getTime(props.created).time }
+                        </Typography>
+                        <Typography className={classes.cardInfo} variant='body2' component='p'>
+                            { props.directory ? <FolderOpen /> : <Description /> }
+                        </Typography>
+                    </CardContent>
+                </Link>
             </CardActionArea>
-            <CardActions>
-                <Button size='small' color='primary'>
-                    Play
+            <CardActions className={classes.cardActions}>
+                <Button
+                    size='small'
+                    style={{color: '#d60000'}}
+                    component={Link}
+                    to={linkTo}
+                >
+                    { props.directory ? 'Browse' : 'Play' }
                 </Button>
-                {
-                    //Show browse button if directory
-                    props.directory ? (
-                        <Link to={props.fullPath} >Browse</Link>
-                    ) : ''
-                }
             </CardActions>
         </Card>
     );

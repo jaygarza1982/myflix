@@ -28,11 +28,11 @@ export default function FileListing(props) {
     }, [folderPath]);
 
     return (
-        <Grid container justify={'center'}>
+        <Grid style={{ width: '100%', margin: 0}}container justify={'center'} spacing={2}>
             {
                 files[folderPath] ? files[folderPath].map((file, index) => {
                     return (
-                        <Grid key={`file-${index}`} item style={{ margin: '10px' }} xs={12} md={3} lg={3} xl={3}>
+                        <Grid key={`file-${index}`} item xs={12} md={6} lg={4} xl={3}>
                             <MediaCard
                                 filename={file.filename}
                                 directory={file.directory}
