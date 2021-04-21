@@ -8,7 +8,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { FolderOpen } from '@material-ui/icons';
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+    padding: '10px',
+  },
   link: {
     textDecoration: 'none',
   },
