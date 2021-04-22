@@ -1,9 +1,18 @@
 import { Grid } from '@material-ui/core';
 import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import MediaCard from './MediaCard';
 import { useParams, useRouteMatch } from 'react-router-dom';
 
+const useStyles = makeStyles({
+    mediaCard: {
+        transition: 'all 1s',
+    }
+})
+
 export default function FileListing(props) {
+    const classes = useStyles();
+
     const [files, setFiles] = React.useState({});
     const [folderPath, setFolderPath] = React.useState('');
 
@@ -28,11 +37,20 @@ export default function FileListing(props) {
     }, [folderPath]);
 
     return (
-        <Grid style={{ width: '100%', margin: 0}}container justify={'center'} spacing={2}>
+        <Grid style={{ width: '100%', margin: 0}} container justify={'center'} spacing={2}>
             {
                 files[folderPath] ? files[folderPath].map((file, index) => {
                     return (
-                        <Grid key={`file-${index}`} item xs={12} md={6} lg={4} xl={3}>
+                        <Grid
+                            className={classes.mediaCard}
+                            style={{animation: 'inAnimation 250ms ease-in'}}
+                            key={`file-${index}`}
+                            item
+                            xs={12}
+                            md={6}
+                            lg={4}
+                            xl={3}
+                        >
                             <MediaCard
                                 filename={file.filename}
                                 directory={file.directory}
