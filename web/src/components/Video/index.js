@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { useParams } from 'react-router-dom';
+import Controls from './Controls';
 
 const useStyles = makeStyles({
     videoContainer: {
@@ -14,6 +15,18 @@ const VideoViewer = () => {
 
     const { video } = useParams();
 
+    const [videoDuration, setVideoDuration] = React.useState(0);
+
+    const onProgress = () => {
+        console.log(videoRef?.current?.getCurrentTime());
+    }
+
+    const onReady = () => {
+        setVideoDuration(videoRef?.current?.getDuration());
+    }
+
+    const videoRef = React.useRef();
+
     return (
         <div>
             <div className={classes.videoContainer}>
@@ -23,8 +36,15 @@ const VideoViewer = () => {
                     url={`/static-file/${video}`}
                     width={'100%'}
                     height={'75vh'}
+                    progressInterval={300}
+                    onProgress={onProgress}
+                    onReady={onReady}
+                    ref={videoRef}
                 />
             </div>
+            <Controls
+                duration={videoDuration}
+            />
         </div>
     );
 }
