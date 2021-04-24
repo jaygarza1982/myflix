@@ -43,12 +43,12 @@ export default function FileListing(props) {
                     return (
                         <Grid
                             className={classes.mediaCard}
-                            style={{animation: 'inAnimation 250ms ease-in'}}
+                            style={{animation: `inAnimation ${Math.min(250*(index + 1), 1500)}ms ease-in`}}
                             key={`file-${index}`}
                             item
                             xs={12}
                             md={6}
-                            lg={4}
+                            lg={2}
                             xl={3}
                         >
                             <MediaCard
