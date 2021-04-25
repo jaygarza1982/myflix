@@ -32,7 +32,6 @@ const Controls = props => {
             <Slider
                 step={0.01}
                 min={0}
-                // scale={x => x/5}
                 valueLabelFormat={value => {
                     return `${chopTimes[0]} - ${chopTimes[1]}s`
                 }}
