@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from '@material-ui/core/Slider';
-import { Button, Grid, makeStyles } from '@material-ui/core';
+import { Button, Grid, makeStyles, Select, MenuItem } from '@material-ui/core';
+import saveAs from 'file-saver';
 
 const useStyles = makeStyles({
     root: {
@@ -11,6 +12,7 @@ const useStyles = makeStyles({
     },
     image: {
         height: '300px',
+        width: '300px',
     }
 });
 
@@ -18,10 +20,27 @@ const Controls = props => {
     const classes = useStyles();
 
     const [chopTimes, setChopTimes] = React.useState([0, props.duration]);
+    const [exportFormat, setExportFormat] = React.useState('mp4');
+
+    const handleExportChange = event => {
+        setExportFormat(event.target.value);
+    }
 
     const handleChopChange = (event, newValue) => {
         setChopTimes(newValue);
     };
+
+    const saveExport = () => {
+        const fetchURL = `/api/video-utils/export-video-segment?video=${props.video}&format=${exportFormat}&startTime=${chopTimes[0]}&endTime=${chopTimes[1]}`;
+        fetch(fetchURL).then(resp => {
+            if (resp.status === 200) {
+                resp.blob().then(blob => {
+                    const filename = `${props.video.split('.')[0]}.${exportFormat}`;
+                    saveAs(blob, filename);
+                });
+            }
+        });
+    }
 
     return (
         <div className={classes.root}>
@@ -45,7 +64,8 @@ const Controls = props => {
             <Grid container justify={'center'}>
                 <Grid
                     item
-                    xs={6}
+                    xs={12}
+                    md={6}
                 >
                     <img
                         className={classes.image}
@@ -54,7 +74,8 @@ const Controls = props => {
                 </Grid>
                 <Grid
                     item
-                    xs={6}
+                    xs={12}
+                    md={6}
                 >
                     <img
                         className={classes.image}
@@ -64,9 +85,23 @@ const Controls = props => {
             </Grid>
             <Button
                 className='button'
+                onClick={saveExport}
             >
-                Export
+                Export as
             </Button>
+            <Select
+                className='secondary'
+                value={exportFormat}
+                onChange={handleExportChange}
+            >
+                <MenuItem value={'mp4'}>MP4</MenuItem>
+                <MenuItem value={'webm'}>WEBM</MenuItem>
+                <MenuItem value={'mov'}>MOV</MenuItem>
+                <MenuItem value={'gif'}>GIF</MenuItem>
+                <MenuItem value={'mp3'}>MP3</MenuItem>
+                <MenuItem value={'flac'}>FLAC</MenuItem>
+                <MenuItem value={'wav'}>WAV</MenuItem>
+            </Select>
         </div>
     );
 }

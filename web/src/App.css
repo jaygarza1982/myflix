@@ -57,6 +57,14 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+.secondary {
+  color: #d60000 !important;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
 .button {
   color: #d60000 !important;
+  margin: 15px !important;
 }
