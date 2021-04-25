@@ -18,7 +18,7 @@ const VideoViewer = () => {
     const [videoDuration, setVideoDuration] = React.useState(0);
 
     const onProgress = () => {
-        console.log(videoRef?.current?.getCurrentTime());
+        console.log('Current video time:', videoRef?.current?.getCurrentTime());
     }
 
     const onReady = () => {
@@ -44,6 +44,7 @@ const VideoViewer = () => {
             </div>
             <Controls
                 duration={videoDuration}
+                video={video}
             />
         </div>
     );

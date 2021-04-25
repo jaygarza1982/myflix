@@ -5,7 +5,7 @@ var fs = require('fs');
 const { exportImage } = require('../../services/VideoUtils');
 
 router.get('/export-from-video', (req, res) => {
-    const { video } = req.query;
+    const { video, time } = req.query;
 
     //Video path with changed extension
     const outputImage = `/app/images/${video.split('.').slice(0, -1).join('')}.jpg`;
@@ -18,7 +18,7 @@ router.get('/export-from-video', (req, res) => {
         }
         else {
             //Export the from from video file and send the image
-            exportImage(`/app/files/${video}`, outputImage, 2, err => {
+            exportImage(`/app/files/${video}`, outputImage, time ? time : '2.00', err => {
                 err ? res.status(500).send(err) : res.sendFile(outputImage);
             });
         }

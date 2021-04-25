@@ -56,3 +56,7 @@
   letter-spacing: 0.02857em;
   font-family: 'Open Sans', sans-serif;
 }
+
+.button {
+  color: #d60000 !important;
+}

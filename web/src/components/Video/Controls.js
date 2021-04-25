@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from '@material-ui/core/Slider';
-import { makeStyles } from '@material-ui/core';
+import { Button, Grid, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
@@ -8,6 +8,9 @@ const useStyles = makeStyles({
     },
     slider: {
         width: '75%',
+    },
+    image: {
+        height: '300px',
     }
 });
 
@@ -29,13 +32,42 @@ const Controls = props => {
             <Slider
                 step={0.01}
                 min={0}
+                // scale={x => x/5}
+                valueLabelFormat={value => {
+                    return `${chopTimes[0]} - ${chopTimes[1]}s`
+                }}
                 max={props.duration}
                 className={classes.slider} 
                 onChange={handleChopChange}
                 value={chopTimes}
                 valueLabelDisplay='auto'
-                // getAriaValueText={valuetext}
+                onChangeCommitted={() => console.log(chopTimes[0], chopTimes[1])}
             />
+            <Grid container justify={'center'}>
+                <Grid
+                    item
+                    xs={6}
+                >
+                    <img
+                        className={classes.image}
+                        src={`/api/video-utils/export-from-video?video=${props.video}&time=${chopTimes[0]}`}
+                    />
+                </Grid>
+                <Grid
+                    item
+                    xs={6}
+                >
+                    <img
+                        className={classes.image}
+                        src={`/api/video-utils/export-from-video?video=${props.video}&time=${chopTimes[1]}`}
+                    />
+                </Grid>
+            </Grid>
+            <Button
+                className='button'
+            >
+                Export
+            </Button>
         </div>
     );
 }

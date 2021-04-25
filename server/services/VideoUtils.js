@@ -1,7 +1,9 @@
 const exec = require('child_process').exec;
 
 exports.exportImage = (inputPath, outputPath, startSeconds, callback) => {
-    const cmd = `ffmpeg -ss ${new Date(startSeconds * 1000).toISOString().substr(11, 8)} -i "${inputPath}" -vframes 1 -q:v 5 "${outputPath}" -y`;
+    const time = startSeconds ? startSeconds : 0;
+    
+    const cmd = `ffmpeg -ss ${new Date(time * 1000).toISOString().substr(11, 11)} -i "${inputPath}" -vframes 1 -q:v 5 "${outputPath}" -y`;
     console.log(`Executing command "${cmd}"`);
     
     exec(cmd, (error, stderr, stdout) => {
