@@ -1,12 +1,12 @@
 import React from 'react';
 import { CustomTextField, CustomButton, useStyles } from '../FormComponents/index';
 
-const Login = props => {
+const Register = props => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <h2>Login</h2>
+            <h2>Register</h2>
             <CustomTextField
                 className={classes.field}
                 label='Username'
@@ -20,13 +20,20 @@ const Login = props => {
                 type='password'
             />
             <br />
+            <CustomTextField
+                className={classes.field}
+                label='Confirm Password'
+                variant='outlined'
+                type='password'
+            />
+            <br />
             <CustomButton
                 variant='outlined'
             >
-                Login
+                Register
             </CustomButton>
         </div>
     );
 }
 
-export default Login;
+export default Register;
