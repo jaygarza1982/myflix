@@ -14,6 +14,7 @@ services:
             - 9229:9229
         environment: 
             - MEDIA_FILES_PATH=files
+            - MONGO_URL=mongodb://myflix:m0ng0p455very53cur3123@myflix-mongo:27017/
     web-server:
         container_name: "myflix-web-server"
         build:
@@ -24,3 +25,13 @@ services:
         ports:
             - 8010:80
             - 8011:81
+    mongo:
+        container_name: "myflix-mongo"
+        image: mongo:4.0.23-xenial
+        ports:
+            - "27020:27017"
+        volumes:
+            - ./mongoDB:/data/db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: myflix
+            MONGO_INITDB_ROOT_PASSWORD: m0ng0p455very53cur3123
