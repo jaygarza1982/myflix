@@ -28,7 +28,7 @@ router.get('/export-from-video', (req, res) => {
 router.get('/export-video-segment', (req, res) => {
     const { video, format, startTime, endTime } = req.query;
 
-    const outputPath = `/app/exported-files/${video}${ format ? `.${format}` : ''}`;
+    const outputPath = `/app/exported-files/${video}-${new Date().getTime()}${ format ? `.${format}` : ''}`;
     const outputFileParentFolder = outputPath.split('/').slice(0, -1).join('/');
 
     //Create directory or directories where file will go
@@ -38,10 +38,18 @@ router.get('/export-video-segment', (req, res) => {
             res.status(500).send(directoryError);
         }
         else {
-            //Export the from from video file and send the image
+            //Start export process of video. Send back success of job start
             exportVideoSegment(`/app/files/${video}`, outputPath, startTime, endTime, err => {
-                err ? res.status(500).send(err) : res.sendFile(outputPath);
+                if (err) {
+                    console.log(`Could not export to ${outputPath}. Reason "${err}"`);
+                }
+                else {
+                    console.log(`Successfully output to ${outputPath}`);
+                }
             });
+
+            //Send where output will be once exported
+            res.send({ outputPath });
         }
     });
 });

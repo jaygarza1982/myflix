@@ -1,6 +1,5 @@
 import React from 'react';
-import Slider from '@material-ui/core/Slider';
-import { Button, Grid, makeStyles, Select, MenuItem } from '@material-ui/core';
+import { Button, Grid, makeStyles, Select, MenuItem, Slider, Modal, Paper } from '@material-ui/core';
 import saveAs from 'file-saver';
 
 const useStyles = makeStyles({
@@ -30,14 +29,28 @@ const Controls = props => {
         setChopTimes(newValue);
     };
 
+    const [open, setOpen] = React.useState(false);
+    const [modalMessage, setModalMessage] = React.useState('');
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const saveExport = () => {
         const fetchURL = `/api/video-utils/export-video-segment?video=${props.video}&format=${exportFormat}&startTime=${chopTimes[0]}&endTime=${chopTimes[1]}`;
         fetch(fetchURL).then(resp => {
             if (resp.status === 200) {
-                resp.blob().then(blob => {
-                    const filename = `${props.video.split('.')[0]}.${exportFormat}`;
-                    saveAs(blob, filename);
+                resp.json().then(json => {
+                    setModalMessage(`Your file has been queued for a job. It can later be found at ${json.outputPath}`);
+                    setOpen(true);
                 });
+                // resp.blob().then(blob => {
+                //     const filename = `${props.video.split('.')[0]}.${exportFormat}`;
+                //     saveAs(blob, filename);
+                // });
             }
         });
     }
@@ -102,6 +115,16 @@ const Controls = props => {
                 <MenuItem value={'flac'}>FLAC</MenuItem>
                 <MenuItem value={'wav'}>WAV</MenuItem>
             </Select>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <Paper>
+                    {modalMessage}
+                </Paper>
+            </Modal>
         </div>
     );
 }

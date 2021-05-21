@@ -22,9 +22,11 @@ services:
         volumes:
             - ./web/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
             - ./server/files:/files
+            - ./server/exported-files:/exported-files
         ports:
             - 8010:80
             - 8011:81
+            - 8012:82
     mongo:
         container_name: "myflix-mongo"
         image: mongo:4.0.23-xenial
