@@ -12,7 +12,18 @@ const useStyles = makeStyles({
     image: {
         height: '300px',
         width: '300px',
-    }
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: '#FFF',
+        border: '2px solid #000',
+        height: 200,
+        padding: 15,
+    },
 });
 
 const Controls = props => {
@@ -31,6 +42,7 @@ const Controls = props => {
 
     const [open, setOpen] = React.useState(false);
     const [modalMessage, setModalMessage] = React.useState('');
+    
     const handleOpen = () => {
         setOpen(true);
     };
@@ -44,7 +56,8 @@ const Controls = props => {
         fetch(fetchURL).then(resp => {
             if (resp.status === 200) {
                 resp.json().then(json => {
-                    setModalMessage(`Your file has been queued for a job. It can later be found at ${json.outputPath}`);
+                    //Remove the '/app/exported-files'
+                    setModalMessage(json.outputPath.split('/').splice(3).join('/'));
                     setOpen(true);
                 });
                 // resp.blob().then(blob => {
@@ -116,14 +129,18 @@ const Controls = props => {
                 <MenuItem value={'wav'}>WAV</MenuItem>
             </Select>
             <Modal
+                className={classes.modal}
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <Paper>
-                    {modalMessage}
-                </Paper>
+                <div className={classes.paper}>
+                    <h2>Job Queued</h2>
+                    Your file has been queued for a job
+                    <br />
+                    It can later be found at <a href={`/exported-files/${modalMessage}`}>{modalMessage}</a>
+                </div>
             </Modal>
         </div>
     );
