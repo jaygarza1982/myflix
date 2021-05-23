@@ -6,6 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/api/files');
 var videoUtilsRouter = require('./routes/api/video-utils');
+var authRouter = require('./routes/api/auth');
 
 var app = express();
 
@@ -17,5 +18,6 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/video-utils', videoUtilsRouter);
+app.use('/api/auth', authRouter);
 
 module.exports = app;
