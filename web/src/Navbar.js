@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Chip from '@material-ui/core/Chip';
@@ -6,6 +6,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link, withRouter } from 'react-router-dom';
 import { FolderOpen } from '@material-ui/icons';
+import UsernameContext from 'components/Contexts/username-context';
 
 const useStyles = makeStyles({
   root: {
@@ -27,9 +28,12 @@ function CustomNavbar(props) {
     let local = props.location.pathname.split('/').filter(s => s.length > 0);
     console.log(local.slice(0, local.length).join('/'));
   }, [props.location]);
-  
 
+  const { username } = useContext(UsernameContext);
+  
   return (
+    <>
+    <div>Username: {username}</div>
     <Breadcrumbs className={classes.root} aria-label="breadcrumb">
       <Link className={classes.link} to='/'>
         <Chip
@@ -47,6 +51,7 @@ function CustomNavbar(props) {
         />
       </Link> */}
     </Breadcrumbs>
+    </>
   );
 }
 

@@ -1,9 +1,12 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import UsernameContext from 'components/Contexts/username-context';
+import React, { useContext, useState } from 'react';
 import { CustomTextField, CustomButton, useStyles } from '../FormComponents/index';
 
 const Login = props => {
     const classes = useStyles();
+
+    const { username, setUsername } = useContext(UsernameContext);
 
     const [state, setState] = useState({
         username: '',
@@ -20,6 +23,7 @@ const Login = props => {
     const sendLogin = () => {
         axios.post('/api/auth/login', state).then(resp => {
             if (resp.status === 200) {
+                setUsername(state.username);
                 console.log('Logged in!');
             }
         }).catch(err => {
@@ -29,7 +33,7 @@ const Login = props => {
 
     return (
         <div className={classes.root}>
-            <h2>Register</h2>
+            <h2>Login</h2>
             <CustomTextField
                 className={classes.field}
                 label='Username'
