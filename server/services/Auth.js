@@ -29,3 +29,20 @@ exports.register = (username, password, confirmPassword) => {
         });
     });
 }
+
+exports.login = (username, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await find('users', { username }, { password: 1 });
+
+            let check = await bcrypt.compare(password, user[0].password);
+
+            check ? resolve(check) : reject(check);
+            return;
+        } catch (err) {
+            console.log(`Could not login user ${username} ${err}`);
+            reject(err);
+            return;
+        }
+    });
+}
