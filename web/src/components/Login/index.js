@@ -20,11 +20,18 @@ const Login = props => {
         });
     }
 
+    const handleKeyDown = event => {
+        if (event.key === 'Enter') {
+            sendLogin();
+        }
+    }
+
     const sendLogin = () => {
         axios.post('/api/auth/login', state).then(resp => {
             if (resp.status === 200) {
                 setUsername(state.username);
                 console.log('Logged in!');
+                props.history.push('/');
             }
         }).catch(err => {
             console.log(`Could not post credentials ${err}`);
@@ -41,6 +48,8 @@ const Login = props => {
                 variant='outlined'
                 value={state.username}
                 onChange={handleTextChange}
+                onKeyDown={handleKeyDown}
+                autoComplete='off'
             />
             <br />
             <CustomTextField
@@ -51,6 +60,8 @@ const Login = props => {
                 type='password'
                 value={state.password}
                 onChange={handleTextChange}
+                onKeyDown={handleKeyDown}
+                autoComplete='off'
             />
             <br />
             <CustomButton

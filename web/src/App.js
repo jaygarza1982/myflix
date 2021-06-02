@@ -1,6 +1,6 @@
 import './App.css';
 import FileList from './components/FileListing';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Navbar from './Navbar';
 import VideoViewer from './components/Video';
 import Login from 'components/Login';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import UsernameContext from 'components/Contexts/username-context';
 import axios from 'axios';
 
-function App() {
+function App(props) {
   const [username, setUsername] = useState('');
 
   //Fetch username on load
@@ -19,8 +19,12 @@ function App() {
         console.log('Got username');
         return resp.json();
       }
+
+      return Promise.reject('User not logged in.');
     }).then(json => {
-      setUsername(json.username);
+      setUsername(json?.username);
+    }).catch(err => {
+      props.history.push('/login');
     });
   }, []);
 
@@ -40,4 +44,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);

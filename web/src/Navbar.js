@@ -33,7 +33,9 @@ function CustomNavbar(props) {
   
   return (
     <>
-    <div>Username: {username}</div>
+    {
+      username ? <div>Welcome, {username}!</div> : <></>
+    }
     <Breadcrumbs className={classes.root} aria-label="breadcrumb">
       <Link className={classes.link} to='/'>
         <Chip

@@ -38,6 +38,7 @@ const Register = props => {
                 variant='outlined'
                 value={state.username}
                 onChange={handleTextChange}
+                autoComplete='off'
             />
             <br />
             <CustomTextField
@@ -48,6 +49,7 @@ const Register = props => {
                 type='password'
                 value={state.password}
                 onChange={handleTextChange}
+                autoComplete='off'
             />
             <br />
             <CustomTextField
@@ -58,6 +60,7 @@ const Register = props => {
                 type='password'
                 value={state.confirmPassword}
                 onChange={handleTextChange}
+                autoComplete='off'
             />
             <br />
             <CustomButton
