@@ -29,9 +29,9 @@ exports.exportImage = (inputPath, outputPath, startSeconds, callback) => {
 }
 
 exports.exportVideoSegment = (inputPath, outputPath, startTime, endTime, callback) => {
-
-
     //Second parameter in FFMPEG is the amount of seconds after the seek
+    //We take our start and end time from HHMMSS to seconds in order to calculate the difference
+    //Then we format it as HHMMSS for FFMPEG
     const timeAfterSeek = formatSeconds(hmsToSeconds(endTime) - hmsToSeconds(startTime));
 
     //Our start time is already HH:MM:SS
