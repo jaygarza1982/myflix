@@ -6,6 +6,13 @@ const formatSeconds = seconds => {
     return `${new Date(time * 1000).toISOString().substr(11, 11)}`;
 }
 
+const hmsToSeconds = hms => {
+    const split  =  hms.split(':');
+    const secondsArray = split.reverse().map((t, index) => t * Math.pow(60, index));
+
+    return secondsArray.reduce((a, i) => a += i);
+}
+
 exports.exportImage = (inputPath, outputPath, startSeconds, callback) => {
     const time = startSeconds ? startSeconds : 0;
     
@@ -21,15 +28,14 @@ exports.exportImage = (inputPath, outputPath, startSeconds, callback) => {
     });
 }
 
-exports.exportVideoSegment = (inputPath, outputPath, startSeconds, endSeconds, callback) => {
+exports.exportVideoSegment = (inputPath, outputPath, startTime, endTime, callback) => {
 
-    //Format our seek seconds and time after seek with HH:MM:SS.XX
-    const seekSeconds = formatSeconds(startSeconds);
 
     //Second parameter in FFMPEG is the amount of seconds after the seek
-    const timeAfterSeek = formatSeconds(endSeconds - startSeconds);
+    const timeAfterSeek = formatSeconds(hmsToSeconds(endTime) - hmsToSeconds(startTime));
 
-    const cmd = `ffmpeg -ss ${seekSeconds} -t ${timeAfterSeek} -i "${inputPath}" "${outputPath}" -y`;
+    //Our start time is already HH:MM:SS
+    const cmd = `ffmpeg -ss ${startTime} -t ${timeAfterSeek} -i "${inputPath}" "${outputPath}" -y`;
     console.log(`Executing command "${cmd}"`);
     
     exec(cmd, function (error, stderr, stdout) {

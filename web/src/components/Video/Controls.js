@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Grid, makeStyles, Select, MenuItem, Slider, Modal, Paper } from '@material-ui/core';
-import saveAs from 'file-saver';
+import { Button, makeStyles, Select, MenuItem, Modal, Paper } from '@material-ui/core';
+import { CustomTextField } from 'components/FormComponents';
 
 const useStyles = makeStyles({
     root: {
@@ -24,27 +24,34 @@ const useStyles = makeStyles({
         height: 200,
         padding: 15,
     },
+    field: {
+        margin: 10
+    }
 });
 
 const Controls = props => {
     const classes = useStyles();
 
-    const [chopTimes, setChopTimes] = React.useState([0, props.duration]);
+    const [startChopTime, setStartChopTime] = React.useState('0');
+
+    //Convert duration seconds to hour minute second
+    const [endChopTime, setEndChopTime] = React.useState(`${new Date(props.duration * 1000).toISOString().substr(11, 8)}`);
+
     const [exportFormat, setExportFormat] = React.useState('mp4');
 
     const handleExportChange = event => {
         setExportFormat(event.target.value);
     }
 
-    const handleChopChange = (event, newValue) => {
-        setChopTimes(newValue);
-    };
-
     const [open, setOpen] = React.useState(false);
     const [modalMessage, setModalMessage] = React.useState('');
     
-    const handleOpen = () => {
-        setOpen(true);
+    const handleStartChopChange = e => {
+        setStartChopTime(e.target.value);
+    };
+
+    const handleEndChopChange = e => {
+        setEndChopTime(e.target.value);
     };
 
     const handleClose = () => {
@@ -52,7 +59,7 @@ const Controls = props => {
     };
 
     const saveExport = () => {
-        const fetchURL = `/api/video-utils/export-video-segment?video=${props.video}&format=${exportFormat}&startTime=${chopTimes[0]}&endTime=${chopTimes[1]}`;
+        const fetchURL = `/api/video-utils/export-video-segment?video=${props.video}&format=${exportFormat}&startTime=${startChopTime}&endTime=${endChopTime}`;
         fetch(fetchURL).then(resp => {
             if (resp.status === 200) {
                 resp.json().then(json => {
@@ -60,55 +67,33 @@ const Controls = props => {
                     setModalMessage(json.outputPath.split('/').splice(3).join('/'));
                     setOpen(true);
                 });
-                // resp.blob().then(blob => {
-                //     const filename = `${props.video.split('.')[0]}.${exportFormat}`;
-                //     saveAs(blob, filename);
-                // });
             }
         });
     }
 
     return (
         <div className={classes.root}>
-            <h2 className='openSansTitle'>
-                Controls
-            </h2>
-            <h3 className='openSansTitle'>Chop</h3>
-            <Slider
-                step={0.01}
-                min={0}
-                valueLabelFormat={value => {
-                    return `${chopTimes[0]} - ${chopTimes[1]}s`
-                }}
-                max={props.duration}
-                className={classes.slider} 
-                onChange={handleChopChange}
-                value={chopTimes}
-                valueLabelDisplay='auto'
-                onChangeCommitted={() => console.log(chopTimes[0], chopTimes[1])}
+            <h3 className='openSansTitle'>Export</h3>
+            <CustomTextField
+                className={classes.field}
+                label='Start (HH:MM:SS)'
+                name='startTime'
+                variant='outlined'
+                value={startChopTime}
+                onChange={handleStartChopChange}
+                autoComplete='off'
             />
-            <Grid container justify={'center'}>
-                <Grid
-                    item
-                    xs={12}
-                    md={6}
-                >
-                    <img
-                        className={classes.image}
-                        src={`/api/video-utils/export-from-video?video=${props.video}&time=${chopTimes[0]}`}
-                    />
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    md={6}
-                >
-                    <img
-                        className={classes.image}
-                        src={`/api/video-utils/export-from-video?video=${props.video}&time=${chopTimes[1]}`}
-                    />
-                </Grid>
-            </Grid>
+            <br />
+            <CustomTextField
+                className={classes.field}
+                label='End (HH:MM:SS)'
+                name='endTime'
+                variant='outlined'
+                value={endChopTime}
+                onChange={handleEndChopChange}
+                autoComplete='off'
+            />
+            <br />
             <Button
                 className='button'
                 onClick={saveExport}
